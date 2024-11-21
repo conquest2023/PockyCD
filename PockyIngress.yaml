@@ -1,0 +1,51 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pockyIngress
+  annotations:
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+    nginx.ingress.kubernetes.io/auth-tls-secret: default/cloudflare-tls-secret
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: zkrp.site
+      http:
+        paths:
+          - path: /cdone
+            pathType: Prefix
+            backend:
+              service:
+                name: pockyservice1
+                port:
+                  number: 8080
+          - path: /nginx
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
+          - path: /cdtwo
+            pathType: Prefix
+            backend:
+              service:
+                name: pockyservice2
+                port:
+                  number: 8080
+          - path: /cdthree
+            pathType: Prefix
+            backend:
+              service:
+                name: pockyservice3
+                port:
+                  number: 8080
+
+  tls:
+    - hosts:
+        - zkrp.site
+      secretName: cloudflare-origin-server
