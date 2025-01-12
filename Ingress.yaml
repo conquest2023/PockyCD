@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress-new
+  #cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: new.zkrp.site
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: svc-https
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - new.zkrp.site
+      secretName: cloudflare-cert
+
