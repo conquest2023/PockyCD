@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: https-deployment
+  namespace: default
+  labels:
+    app: https
+spec:
+  replicas: 3 # 레플리카 수 설정
+  selector:
+    matchLabels:
+      app: https # Pod의 label과 일치해야 함
+  template:
+    metadata:
+      labels:
+        app: https # Deployment가 관리할 Pod의 label
+    spec:
+      containers:
+        - name: container
+          image: wngud1/hoeng:2.6.9
+          env:
+            - name: TZ
+              value: "Asia/Seoul"
+      terminationGracePeriodSeconds: 0
